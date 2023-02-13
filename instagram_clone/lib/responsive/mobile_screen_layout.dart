@@ -44,7 +44,7 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
 
   @override
   Widget build(BuildContext context) {
-    model.User? user = Provider.of<UserProvider>(context).getuser;
+    model.User? user = Provider.of<UserProvider>(context).getUser;
 
     return user == null
         ? const Center(
