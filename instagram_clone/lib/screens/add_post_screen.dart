@@ -39,8 +39,12 @@ class _AddPostScreenState extends State<AddPostScreen> {
       });
       if (res == 'success') {
         showSnackBar('Posted', context);
+        clearImage();
       } else {
         showSnackBar(res, context);
+        setState(() {
+          _isLoading = false;
+        });
       }
     } catch (e) {
       showSnackBar(e.toString(), context);
@@ -88,6 +92,12 @@ class _AddPostScreenState extends State<AddPostScreen> {
         });
   }
 
+  void clearImage() {
+    setState(() {
+      _file = null;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final User? user = Provider.of<UserProvider>(context).getuser;
@@ -101,7 +111,8 @@ class _AddPostScreenState extends State<AddPostScreen> {
             appBar: AppBar(
               backgroundColor: mobileBackgroundColor,
               leading: IconButton(
-                  onPressed: () {}, icon: const Icon(Icons.arrow_back)),
+                  onPressed: () => clearImage(),
+                  icon: const Icon(Icons.arrow_back)),
               title: const Text('Post to'),
               centerTitle: false,
               actions: [
@@ -119,6 +130,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
             ),
             body: Column(
               children: [
+                _isLoading ? const LinearProgressIndicator() : Container(),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   crossAxisAlignment: CrossAxisAlignment.start,

@@ -24,7 +24,7 @@ class FireStoreMethods {
           postUrl: photoUrl,
           profImage: profImage,
           likes: []);
-      _firestore.collection('posts').doc(post.toString());
+      _firestore.collection('posts').doc(postId).set(post.toJson());
       res = 'Success';
     } catch (err) {
       res = err.toString();
