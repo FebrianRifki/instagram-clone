@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:instagram_clone/screens/profile_screen.dart';
 import 'package:instagram_clone/utils/colors.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -51,14 +52,23 @@ class _SearchScreenState extends State<SearchScreen> {
                 return ListView.builder(
                     itemCount: (snapshot.data! as dynamic).docs.length,
                     itemBuilder: ((context, index) {
-                      return ListTile(
-                        leading: CircleAvatar(
-                          backgroundImage: NetworkImage(
-                              (snapshot.data! as dynamic).docs[index]
-                                  ['photoUrl']),
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => ProfileScreen(
+                                uid: (snapshot.data! as dynamic).docs[index]
+                                    ['uid']),
+                          ));
+                        },
+                        child: ListTile(
+                          leading: CircleAvatar(
+                            backgroundImage: NetworkImage(
+                                (snapshot.data! as dynamic).docs[index]
+                                    ['photoUrl']),
+                          ),
+                          title: Text((snapshot.data! as dynamic).docs[index]
+                              ['username']),
                         ),
-                        title: Text((snapshot.data! as dynamic).docs[index]
-                            ['username']),
                       );
                     }));
               },
@@ -71,19 +81,6 @@ class _SearchScreenState extends State<SearchScreen> {
                     child: CircularProgressIndicator(),
                   );
                 }
-                // return MasonryGridView.builder(
-                //   scrollDirection: Axis.vertical,
-                //   crossAxisSpacing: 8,
-                //   mainAxisSpacing: 6,
-                //   gridDelegate:
-                //       const SliverSimpleGridDelegateWithFixedCrossAxisCount(
-                //           crossAxisCount: 2),
-                //   itemCount: (snapshot.data! as dynamic).docs.length,
-                //   itemBuilder: (context, index) {
-                //     return Image.network(
-                //         (snapshot.data as dynamic).docs[index]['postUrl']);
-                //   },
-                // );
                 return MasonryGridView.count(
                   itemCount: (snapshot.data! as dynamic).docs.length,
                   crossAxisCount: 2,
@@ -91,7 +88,9 @@ class _SearchScreenState extends State<SearchScreen> {
                   crossAxisSpacing: 8,
                   itemBuilder: (context, index) {
                     return Image.network(
-                        (snapshot.data as dynamic).docs[index]['postUrl']);
+                      (snapshot.data as dynamic).docs[index]['postUrl'],
+                      fit: BoxFit.cover,
+                    );
                   },
                 );
               },
